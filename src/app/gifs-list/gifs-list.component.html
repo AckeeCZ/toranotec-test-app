@@ -1,5 +1,11 @@
 <mat-grid-list cols="3" gutterSize="10">
-  <mat-grid-tile *ngFor="let gif of gifs | async">
+  <mat-grid-tile *ngFor="let gif of (gifs | async)?.data">
     <img src="{{ gif.images.original.url }}" />
   </mat-grid-tile>
 </mat-grid-list>
+<mat-paginator
+  hidePageSize="true"
+  [length]="(gifs | async)?.totalCount ?? 0"
+  [pageSize]="pageSize"
+  (page)="onPageChange($event.pageIndex)"
+></mat-paginator>
