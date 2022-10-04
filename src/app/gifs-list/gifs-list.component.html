@@ -1,0 +1,5 @@
+<mat-grid-list cols="3" gutterSize="10">
+  <mat-grid-tile *ngFor="let gif of gifs | async">
+    <img src="{{ gif.images.original.url }}" />
+  </mat-grid-tile>
+</mat-grid-list>
