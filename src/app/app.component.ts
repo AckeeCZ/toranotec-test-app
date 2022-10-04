@@ -16,7 +16,12 @@ import { GiphyService } from './giphy.service';
       <h1>Gif seeker</h1>
 
       <app-search (queryChange)="searchQuerySubject$.next($event)"></app-search>
+
+      <div class="empty-message" *ngIf="(searchQuerySubject$ | async) === ''">
+        No search term = no Gifs 🤷‍♂️
+      </div>
       <app-gifs-list [gifs]="gifs"></app-gifs-list>
+
       <app-pagination
         [pageSize]="pageSize"
         [totalCount]="totalCount"
