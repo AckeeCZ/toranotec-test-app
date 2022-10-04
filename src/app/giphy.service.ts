@@ -14,7 +14,7 @@ export class GiphyService {
     this.gf = new GiphyFetch(environment.giphyApiKey);
   }
 
-  getGifs(limit = 9, offset = 0): Observable<GifsResult> {
-    return from(this.gf.trending({ offset, limit }));
+  getGifs(query: string, limit = 9, offset = 0): Observable<GifsResult> {
+    return from(this.gf.search(query, { offset, limit }));
   }
 }

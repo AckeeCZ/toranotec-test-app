@@ -1,6 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { GifsResult } from '@giphy/js-fetch-api';
-import { BehaviorSubject, map, Observable, switchMap } from 'rxjs';
+import {
+  BehaviorSubject,
+  combineLatest,
+  map,
+  Observable,
+  switchMap,
+} from 'rxjs';
 import { GiphyService } from './giphy.service';
 
 @Component({
@@ -9,6 +15,7 @@ import { GiphyService } from './giphy.service';
     <main>
       <h1>Gif seeker</h1>
 
+      <app-search (queryChange)="searchQuerySubject$.next($event)"></app-search>
       <app-gifs-list [gifs]="gifs"></app-gifs-list>
       <app-pagination
         [pageSize]="pageSize"
@@ -22,7 +29,8 @@ import { GiphyService } from './giphy.service';
 export class AppComponent implements OnInit {
   pageSize: number = 9;
 
-  protected pageIndexSubject$ = new BehaviorSubject(0);
+  protected pageIndexSubject$ = new BehaviorSubject<number>(0);
+  protected searchQuerySubject$ = new BehaviorSubject<string>('');
 
   gifsResult: Observable<GifsResult>;
 
@@ -32,9 +40,16 @@ export class AppComponent implements OnInit {
   constructor(private giphyService: GiphyService) {}
 
   ngOnInit(): void {
-    this.gifsResult = this.pageIndexSubject$.pipe(
-      switchMap((pageIndex) =>
-        this.giphyService.getGifs(this.pageSize, this.pageSize * pageIndex)
+    this.gifsResult = combineLatest([
+      this.pageIndexSubject$,
+      this.searchQuerySubject$,
+    ]).pipe(
+      switchMap(([pageIndex, searchQuery]) =>
+        this.giphyService.getGifs(
+          searchQuery,
+          this.pageSize,
+          this.pageSize * pageIndex
+        )
       )
     );
 

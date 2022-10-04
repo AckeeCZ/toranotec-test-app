@@ -9,10 +9,16 @@ import { FormsModule } from '@angular/forms';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { GifsListComponent } from './gifs-list/gifs-list.component';
+import { SearchComponent } from './search/search.component';
 import { PaginationComponent } from './pagination/pagination.component';
 
 @NgModule({
-  declarations: [AppComponent, GifsListComponent, PaginationComponent],
+  declarations: [
+    AppComponent,
+    GifsListComponent,
+    SearchComponent,
+    PaginationComponent,
+  ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
