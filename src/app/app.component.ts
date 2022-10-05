@@ -20,9 +20,10 @@ import { GiphyService } from './giphy.service';
       <div class="empty-message" *ngIf="(searchQuerySubject$ | async) === ''">
         No search term = no Gifs 🤷‍♂️
       </div>
-      <app-gifs-list [gifs]="gifs"></app-gifs-list>
+      <app-gifs-list [gifs]="gifs" *ngIf="totalCount | async"></app-gifs-list>
 
       <app-pagination
+        *ngIf="totalCount | async"
         [pageSize]="pageSize"
         [totalCount]="totalCount"
         (pageChange)="pageIndexSubject$.next($event)"
