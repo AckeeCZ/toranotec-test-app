@@ -1,22 +1,30 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { render, screen, waitFor } from '@testing-library/angular';
+import userEvent from '@testing-library/user-event';
 
+import { MaterialModule } from '../material.module';
 import { PaginationComponent } from './pagination.component';
+import { of } from 'rxjs';
 
 describe('PaginationComponent', () => {
-  let component: PaginationComponent;
-  let fixture: ComponentFixture<PaginationComponent>;
+  const imports = [MaterialModule];
+  const changePage = jest.fn();
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      declarations: [PaginationComponent],
-    }).compileComponents();
-
-    fixture = TestBed.createComponent(PaginationComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+  beforeEach(() => {
+    changePage.mockReset();
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  it('should emit page change', async () => {
+    await render(PaginationComponent, {
+      imports,
+      componentProperties: {
+        pageSize: 3,
+        totalCount: of(9),
+        pageChange: { emit: changePage } as any,
+      },
+    });
+
+    userEvent.click(screen.getByLabelText(/next page/i));
+
+    await waitFor(() => expect(changePage).toHaveBeenCalled());
   });
 });
